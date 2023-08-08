@@ -615,29 +615,33 @@ export class AutolinkWindows {
         });
       });
     }
-
-    const csModuleNames = this.getCSModules();
-    if (csModuleNames.length > 0) {
-      // Add managed projects
-      projectsForSolution.push({
-        projectFile: path.join(
-          rnwRoot,
-          'Microsoft.ReactNative.Managed/Microsoft.ReactNative.Managed.csproj',
-        ),
-        projectName: 'Microsoft.ReactNative.Managed',
-        projectLang: 'cs',
-        projectGuid: '{F2824844-CE15-4242-9420-308923CD76C3}',
-      });
-      projectsForSolution.push({
-        projectFile: path.join(
-          rnwRoot,
-          'Microsoft.ReactNative.Managed.CodeGen//Microsoft.ReactNative.Managed.CodeGen.csproj',
-        ),
-        projectName: 'Microsoft.ReactNative.Managed.CodeGen',
-        projectLang: 'cs',
-        projectGuid: '{ADED4FBE-887D-4271-AF24-F0823BCE7961}',
-        projectTypeGuid: vstools.dotNetCoreProjectTypeGuid,
-      });
+    
+    const config = this.getWindowsConfig();
+    // When we use experimental Nuget we don't need added project reference from node_modules
+    if(!config.experimentalFeatures.UseExperimentalNuget) {
+      const csModuleNames = this.getCSModules();
+      if (csModuleNames.length > 0) {
+        // Add managed projects
+        projectsForSolution.push({
+          projectFile: path.join(
+            rnwRoot,
+            'Microsoft.ReactNative.Managed/Microsoft.ReactNative.Managed.csproj',
+          ),
+          projectName: 'Microsoft.ReactNative.Managed',
+          projectLang: 'cs',
+          projectGuid: '{F2824844-CE15-4242-9420-308923CD76C3}',
+        });
+        projectsForSolution.push({
+          projectFile: path.join(
+            rnwRoot,
+            'Microsoft.ReactNative.Managed.CodeGen//Microsoft.ReactNative.Managed.CodeGen.csproj',
+          ),
+          projectName: 'Microsoft.ReactNative.Managed.CodeGen',
+          projectLang: 'cs',
+          projectGuid: '{ADED4FBE-887D-4271-AF24-F0823BCE7961}',
+          projectTypeGuid: vstools.dotNetCoreProjectTypeGuid,
+        });
+      }
     }
 
     verboseMessage(
